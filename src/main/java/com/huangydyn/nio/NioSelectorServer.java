@@ -8,8 +8,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.UUID;
 
-public class SimpleNioServer {
+public class NioSelectorServer {
 
     public static void main(String[] args) throws IOException {
         // 1、获取Selector选择器
@@ -27,6 +28,7 @@ public class SimpleNioServer {
 
         // 6、采用轮询的方式，查询获取“准备就绪”的注册过的操作
         while (true) {
+            // 阻塞
             if (selector.select() == 0) {
                 continue;
             }
@@ -52,6 +54,11 @@ public class SimpleNioServer {
     }
 
     private static void process(SelectionKey selectedKey) throws IOException {
+        String id = UUID.randomUUID().toString();
+        System.out.println("收到连接, 请求: " + id);
+
+        System.out.println("开始处理, 请求: " + id);
+
         // 13、获取该选择器上的“读就绪”状态的通道
         SocketChannel socketChannel = (SocketChannel) selectedKey.channel();
 

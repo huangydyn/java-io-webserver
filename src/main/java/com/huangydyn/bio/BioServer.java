@@ -3,6 +3,7 @@ package com.huangydyn.bio;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 
 public class BioServer {
 
@@ -15,9 +16,15 @@ public class BioServer {
             System.out.println("监听来自于" + DEFAULT_PORT + "的端口信息");
             serverSocket = new ServerSocket(DEFAULT_PORT);
             while (true) {
+                String id = UUID.randomUUID().toString();
+                System.out.println("开始等待, 请求: " + id);
                 Socket socket = serverSocket.accept();
+                System.out.println("收到连接, 请求: " + id);
+                Thread.sleep(10000);
+
+                // worker线程处理IO读写，不阻塞读连接
                 SocketServerThread socketServerThread = new SocketServerThread(socket);
-                System.out.println("建立连接, 线程: " + Thread.currentThread().getId());
+                System.out.println("建立线程处理, 请求: " + id);
                 new Thread(socketServerThread).start();
             }
         } catch (Exception e) {

@@ -17,19 +17,18 @@ class SocketServerThread implements Runnable {
         InputStream in = null;
         OutputStream out = null;
         try {
-            //下面我们收取信息
+            // 线程处理
             in = socket.getInputStream();
             out = socket.getOutputStream();
             Integer sourcePort = socket.getPort();
             int maxLen = 1024;
             byte[] contextBytes = new byte[maxLen];
-            //使用线程，同样无法解决read方法的阻塞问题，
-            //也就是说read方法处同样会被阻塞，直到操作系统有数据准备好
+
+            // 线程阻塞在read直到操作系统有数据准备好
             int realLen = in.read(contextBytes, 0, maxLen);
-            //读取信息
             String message = new String(contextBytes, 0, realLen);
 
-            Thread.sleep(10000);
+            Thread.sleep(100);
             //下面打印信息
             System.out.println("服务器收到来自于端口：" + sourcePort + ", 处理线程" + Thread.currentThread().getId());
             //下面开始发送信息
